@@ -9,3 +9,19 @@ export const index = (req, res, next) => {
     }))}
   ));
 };
+
+
+exports.listWithParams = function(req, res) {
+    Shop.find()
+    .where('location')
+    .equals(req.params.param1)
+    .exec(function(err, articles) {
+        if (err) {
+            return res.send(400, {
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.jsonp(articles);
+        }
+    });
+};
