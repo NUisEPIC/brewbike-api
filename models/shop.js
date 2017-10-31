@@ -3,10 +3,8 @@ import mongoose, { Schema } from 'mongoose';
 
 // Define movie schema
 var shopSchema = new Schema({
-  time: {
-    type: Date,
-    unique: true,
-  },
+  start_time: Date,
+  end_time: Date,
   location: String,
 });
 

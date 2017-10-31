@@ -4,10 +4,12 @@ import mongoose from 'mongoose';
 import router from './router';
 
 
-
-
 // Initialize http server
 const app = express();
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Logger that outputs all requests into the console
 app.use(morgan('combined'));

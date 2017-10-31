@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 // Import index action from movies controller
-import { index, listWithParams } from './controllers/shops';
+import { index, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 
 // Initialize the router
 const router = Router();
@@ -14,6 +14,16 @@ router.get('/', function (req, res) {
 });
 
 router.route('/shops/:param1')
-    .get(listWithParams);
+    .get(getAllByLoc);
+
+router.route('/addshop').post(addShop);
+
+router.route('/shops/:loc/:start').get(getId);
+
+router.route('/shops/:id').put(updateById);
+
+router.route('/shops/:loc/:start').put(updateByLocTime);
+
+router.route('/shops/:id').delete(deleteById)
 
 export default router;
