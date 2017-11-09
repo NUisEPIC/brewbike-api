@@ -1,9 +1,9 @@
 import Shop from '../models/shop';
 
 export const index = (req, res, next) => {
-  // Find all movies and return json response
+  // Find all shops, return json
   Shop.find().lean().exec((err, shops) => res.json(
-    // Iterate through each movie
+    // Iterate through each shop
     { shops: shops.map(shop => ({
       ...shop,
     }))}
@@ -72,6 +72,19 @@ export const deleteById = (req,res,next) => {
             res.send('object successfully deleted');
         }
     });
+};
+
+export const getAllLoc = (req,res,next) => {
+  Shop.find().distinct('location')
+  .exec(function(err, articles) {
+      if (err) {
+          return res.send(400, {
+              message: getErrorMessage(err)
+          });
+      } else {
+          res.jsonp(articles);
+      }
+  });
 };
 
 exports.getAllByLoc = function(req, res) {
