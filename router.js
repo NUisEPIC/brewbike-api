@@ -1,6 +1,10 @@
 import express, { Router } from 'express';
+
+
+
 // Import index action from movies controller
 import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
+import {subscribe} from './controllers/subscriptions';
 
 // Initialize the router
 const router = Router();
@@ -35,5 +39,8 @@ router.route('/shops/:loc/:start').put(updateByLocTime);
 
 // delete an object using its ID
 router.route('/shops/:id').delete(deleteById)
+
+// subscribe a phone number to notifications - twilio functionality
+router.route('/subscribe').post(subscribe);
 
 export default router;
