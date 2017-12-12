@@ -2,8 +2,6 @@ import Subscribe from '../models/subscribe';
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-// TODO - check if this works
-
 export const subscribe = (req, res, next) => {
     // add code to add phone number in database here
     const twiml = new MessagingResponse();
@@ -47,9 +45,4 @@ export const subscribe = (req, res, next) => {
         return
     }
 
-}
-
-
-export const notify = (req, res, next) => {
-    // add code for notification blast function here
 }

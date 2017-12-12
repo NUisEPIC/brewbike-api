@@ -6,6 +6,6 @@ var subscriber = new Schema({
     number: Number,
     
 });
-subscriber.index({number: 1}, {unique: true});
+subscriber.index({number: 1}, {unique: true}); // making the number an index so that mongoDB ensures uniqueness in values
 // Export Mongoose model
 export default mongoose.model('subscriber', subscriber);

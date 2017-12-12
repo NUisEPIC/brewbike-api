@@ -5,6 +5,7 @@ import express, { Router } from 'express';
 // Import index action from movies controller
 import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 import {subscribe} from './controllers/subscriptions';
+import {notifySubscribers, getAllNotifications} from './controllers/notifications';
 
 // Initialize the router
 const router = Router();
@@ -42,5 +43,11 @@ router.route('/shops/:id').delete(deleteById)
 
 // subscribe a phone number to notifications - twilio functionality
 router.route('/subscribe').post(subscribe);
+
+// notify all phone numbers via text with given notification + add it to db
+router.route('/notify').post(notifySubscribers)
+
+// get all notifications
+router.route('/notifications').get(getAllNotifications);
 
 export default router;
