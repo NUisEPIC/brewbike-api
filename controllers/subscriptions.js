@@ -18,7 +18,11 @@ export const subscribe = (req, res, next) => {
         });
         subscriber.save()
         .then(item => {
-            res.send("Subscriber saved to database");
+            twiml.message("Thanks for opting-in for text notifications from BrewBike! We won't bother you with un-necessary stuff. We'll only message you with our daily shop timings, unexpected changes to our schedule and the occasional promotion. Not buying it? Reply with 'unsub' to unsubscribe from notifications. Have a great day!");
+            res.writeHead(200, {'Content-Type': 'text/xml'});
+            res.end(twiml.toString());
+            
+            // res.send("Subscriber saved to database");
         })
         .catch(err => {
             console.error(err);
@@ -27,24 +31,22 @@ export const subscribe = (req, res, next) => {
     }
     else if (text === 'unsub') {
         Subscribe.remove({number: phoneNumber})
-        .exec( (err, articles) => {
-            if (err) {
-                return res.send(400, {
-                    message: getErrorMessage(err)
-                });
-            } else {
-                res.send('Subscriber successfully deleted');
-            }
+        .then( (item) => {
+            twiml.message("You have unsubscribed from text notifications from BrewBike. We'll miss you! You can opt-in again at any time by replying 'subscribe'.");
+            res.writeHead(200, {'Content-Type': 'text/xml'});
+            res.end(twiml.toString());
+            // res.send('Subscriber successfully deleted');
         })
+        .catch( (err) => {
+            return res.send(400, {
+                message: getErrorMessage(err)
+            });       
+        });
     }
     else { // dont do anything if it isn't either of the two
         return
     }
 
-    twiml.message("Thanks for opting-in for text notifications from BrewBike! We won't bother you with un-necessary stuff. We'll only message you with our daily shop timings, unexpected changes to our schedule and the occasional promotion. Not buying it? Reply with 'unsub' to unsubscribe from notifications. Have a great day!");
-    
-    res.writeHead(200, {'Content-Type': 'text/xml'});
-    res.end(twiml.toString());
 }
 
 

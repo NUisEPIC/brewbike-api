@@ -22,7 +22,7 @@ app.use(morgan('combined'));
 app.use('/v1', router);
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost/shops', function(err){
+mongoose.connect('mongodb://localhost/brewBikeTest', function(err){
   const server = app.listen(2000, () => {
     const { address, port } = server.address();
     console.log(`Listening at http://${address}:${port}`);
