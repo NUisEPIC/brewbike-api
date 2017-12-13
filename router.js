@@ -5,7 +5,7 @@ import express, { Router } from 'express';
 // Import index action from movies controller
 import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 import {subscribe} from './controllers/subscriptions';
-import {notifySubscribers, getAllNotifications} from './controllers/notifications';
+import {notifySubscribers, getNotifications} from './controllers/notifications';
 
 // Initialize the router
 const router = Router();
@@ -47,7 +47,7 @@ router.route('/subscribe').post(subscribe);
 // notify all phone numbers via text with given notification + add it to db
 router.route('/notify').post(notifySubscribers)
 
-// get all notifications
-router.route('/notifications').get(getAllNotifications);
+// get notifications. If queryString is given parameter ?limit=X where X is an int, will return the latest X notifications sent
+router.route('/notifications').get(getNotifications);
 
 export default router;

@@ -41,14 +41,31 @@ export const notifySubscribers = (req, res, next) => {
 }
 
 // to get all notifications previously sent
-export const getAllNotifications = (req, res, next) => {
-    Notification.find().lean().exec( (err, notifications) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Failure to get notifications.");
-        }
-        else {
-            res.end(JSON.stringify(notifications));
-        }
-    });
+export const getNotifications = (req, res, next) => {
+    if (req.query.limit === undefined) { // if the optional query cparameter 'limit' is not given
+        Notification.find().sort('-notify_time')
+        .lean().exec( (err, notifications) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Failure to get notifications.");
+            }
+            else {
+                res.end(JSON.stringify(notifications));
+            }
+        });
+    }
+    else {
+        Notification.find().sort('-notify_time')
+        .limit(parseInt(req.query.limit))
+        .lean().exec( (err, notifications) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Failure to get notifications.");
+            }
+            else {
+                res.end(JSON.stringify(notifications));
+            }
+        });
+    }
+    
 }
