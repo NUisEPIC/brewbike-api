@@ -1,5 +1,18 @@
 import Shop from '../models/shop';
 
+const getErrorMessage = (err) => {
+	if (err.errors) {
+		for (var errName in err.errors) {
+			if (err.errors[errName].message) {
+				 return err.errors[errName].message;
+			}
+			else {
+				return 'Unknown server error';
+			}
+		}
+	}
+}
+
 export const index = (req, res, next) => {
   // Find all shops, return json
   Shop.find().lean().exec((err, shops) => res.json(
