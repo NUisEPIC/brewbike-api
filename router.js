@@ -3,7 +3,7 @@ import express, { Router } from 'express';
 
 
 // Import index action from movies controller
-import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
+import { index, getAllLoc, getAllByLoc, addShop, getShopById, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 import {subscribe} from './controllers/subscriptions';
 import {notifySubscribers, getNotifications} from './controllers/notifications';
 
@@ -25,6 +25,9 @@ router.route('/shops/locations')
 // get all the objects by a particular location
 router.route('/shops/:param1')
     .get(getAllByLoc);
+
+// get a shop by id ( '_id' field in mongodb document, implicitly assigned)
+router.route('/shops/:id').get(getShopById);
 
 // req body must include a shop json object to add
 router.route('/addshop').post(addShop);

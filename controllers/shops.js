@@ -1,4 +1,5 @@
 import Shop from '../models/shop';
+import mongoose from 'mongoose';
 
 const getErrorMessage = (err) => {
 	if (err.errors) {
@@ -33,6 +34,22 @@ export const addShop = (req, res, next) => {
     .catch(err => {
       res.status(400).send("unable to save to database");
     });
+};
+
+export const getShopById = (req, res, next) => {
+	res.send(req.params.id) // debug
+	Shop.findById(mongoose.Types.ObjectId(req.params.id))
+	.exec( (err, article) => {
+		if (err) {
+			return res.send(400, {
+				message: getErrorMessage(err)
+			});
+		} else {
+			console.log(article); // debugging statement
+			res.jsonp(article);
+			next();
+		}
+	});
 };
 
 export const getId = (req,res,next) => {
