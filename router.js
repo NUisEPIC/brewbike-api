@@ -6,6 +6,7 @@ import express, { Router } from 'express';
 import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 import {subscribe} from './controllers/subscriptions';
 import {notifySubscribers, getNotifications} from './controllers/notifications';
+import {addActivity} from './controllers/activities';
 
 // Initialize the router
 const router = Router();
@@ -49,5 +50,8 @@ router.route('/notify').post(notifySubscribers)
 
 // get notifications. If queryString is given parameter ?limit=X where X is an int, will return the latest X notifications sent
 router.route('/notifications').get(getNotifications);
+
+// add a new activity to display at the activities section
+router.route('/addactivity').post(addActivity);
 
 export default router;
