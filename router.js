@@ -6,7 +6,7 @@ import express, { Router } from 'express';
 import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 import {subscribe} from './controllers/subscriptions';
 import {notifySubscribers, getNotifications} from './controllers/notifications';
-import {addActivity} from './controllers/activities';
+import {addActivity, loadActivities, clearActivities} from './controllers/activities';
 
 // Initialize the router
 const router = Router();
@@ -53,5 +53,9 @@ router.route('/notifications').get(getNotifications);
 
 // add a new activity to display at the activities section
 router.route('/addactivity').post(addActivity);
+
+router.route('/loadactivities').get(loadActivities);
+
+router.route('/clearactivities').delete(clearActivities);
 
 export default router;
