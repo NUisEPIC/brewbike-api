@@ -5,12 +5,41 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
-export const scheduleNotification = (req, res, next) => {
-  
 
+// the local hashTable (dict)  that stores the notification id with the corresponding job object
+let jobs = {}
+
+// TODO - function called to send the notification blast at the scheduled time, by the scheduler, aka. chron or node-schedule
+// called by the scheduleNotification function
+const notifyViaChron = (message) => {
 
 }
 
+// TODO - function to schedule a notification - post request data will be in req.body
+export const scheduleNotification = (req, res, next) => {
+
+}
+
+// TODO - function to delete a scheduled notfiication - its a delete request, but you will need the notification _id. so it will be given to you as a route param.
+// can access the _id by req.params.id
+export const deleteNotification = (req, res, next) => {
+
+}
+
+// TODO - function to get all scheduled notifications - get request
+export const getScheduledNotifications = (req, res, next) => {
+
+}
+
+// TODO - function to get a scheduled notification by _id
+export const getScheduledNotificationsById = (req, res, next) => {
+
+}
+
+// TODO - function to update a scheduled notification before its sent
+export const updateScheduledNotification = (req, res, next) => {
+
+}
 
 
 // to blast notification to all phone_numbers in subscribers collection

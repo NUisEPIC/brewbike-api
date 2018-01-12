@@ -5,7 +5,7 @@ import express, { Router } from 'express';
 // Import index action from movies controller
 import { index, getAllLoc, getAllByLoc, addShop, getId, updateById, updateByLocTime, deleteById } from './controllers/shops';
 import {subscribe} from './controllers/subscriptions';
-import {notifySubscribers, getNotifications} from './controllers/notifications';
+import {getScheduledNotifications, getScheduledNotificationById, deleteNotification, updateScheduledNotification, scheduleNotification, notifySubscribers, getNotifications} from './controllers/notifications';
 
 // Initialize the router
 const router = Router();
@@ -52,5 +52,20 @@ router.route('/notify/schedule').post(scheduleNotification)
 
 // get notifications. If queryString is given parameter ?limit=X where X is an int, will return the latest X notifications sent
 router.route('/notifications').get(getNotifications);
+
+// route to schedule notifications for future - TODO
+router.route('/notify/schedule').post(scheduleNotification);
+
+// route to delete a scheduled notification - TODO
+router.route('/notify/schedule/:id').delete(deleteNotification);
+
+// route to get all scheduled notifications from the db - TODO
+router.route('/notify/schedule').get(getScheduledNotifications);
+
+// route to get a particular scheduled notification by id - TODO
+router.route('/notify/schedule/:id').get(getScheduledNotificationById);
+
+// route to update a particular scheduled notification before it is sent - TODO
+router.route('/notify/schedule/:id').put(updateScheduledNotification);
 
 export default router;
