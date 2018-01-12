@@ -5,6 +5,14 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
+export const scheduleNotification = (req, res, next) => {
+  
+
+
+}
+
+
+
 // to blast notification to all phone_numbers in subscribers collection
 export const notifySubscribers = (req, res, next) => {
     console.log(req.params) // debugging statement
@@ -67,5 +75,5 @@ export const getNotifications = (req, res, next) => {
             }
         });
     }
-    
+
 }

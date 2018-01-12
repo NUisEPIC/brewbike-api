@@ -47,6 +47,9 @@ router.route('/subscribe').post(subscribe);
 // notify all phone numbers via text with given notification + add it to db
 router.route('/notify').post(notifySubscribers)
 
+// Notify all phone numbers via text with given notification at a specific time + add it to db
+router.route('/notify/schedule').post(scheduleNotification)
+
 // get notifications. If queryString is given parameter ?limit=X where X is an int, will return the latest X notifications sent
 router.route('/notifications').get(getNotifications);
 
