@@ -1,44 +1,136 @@
 import Notification from '../models/notification';
 import Subscribe from '../models/subscribe';
+import Inqueue from '../models/inqueue';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
-
+var CronJob = require('cron').CronJob;
 
 // the local hashTable (dict)  that stores the notification id with the corresponding job object
 let jobs = {}
 
 // TODO - function called to send the notification blast at the scheduled time, by the scheduler, aka. chron or node-schedule
 // called by the scheduleNotification function
-const notifyViaChron = (message) => {
+const notifyViaCron = (message) => {
 
+    Subscribe.find( (err, subscribers) => {
+      console.log(subscribers) // debugging statement
+
+      for (var i = 0; i < subscribers.length; i++) { // iterating through all notifications in db
+          client.messages.create({ // sending notification message to number
+              body: message,
+              to: parseInt(subscribers[i].number),
+              from: '+15735754617' // our twilio number
+          })
+          .then((message) => process.stdout.write(message.sid));
+      }
+  })
+  .then(
+      res.send(`Sent out notification blast to all numbers.`)
+
+  )
+  .catch( (err) => {
+      console.error(err);
+      res.status(400).send("Notification blast failed.");
+  });
+  // Remove from Inqueue add to notifications
 }
 
 // TODO - function to schedule a notification - post request data will be in req.body
 export const scheduleNotification = (req, res, next) => {
+    var note = new Inqueue({
+        notify_time: req.body.notify_time,
+        text: req.body.text,
+        user: req.body.user
+    });
 
+    note.save(); // saving notification to db
+    // Creating CronJob
+    var job = new CronJob(req.body.notify_time, notifyViaCron(req.body.text))
+    // Saving a local copy of the job in jobs dict
+    jobs.push({
+      key: req.params.id, //
+      value: job
+    });
+
+    job.start();
 }
 
 // TODO - function to delete a scheduled notfiication - its a delete request, but you will need the notification _id. so it will be given to you as a route param.
 // can access the _id by req.params.id
 export const deleteNotification = (req, res, next) => {
-
+    jobs[req.params.id].stop();
+    //remove from inqueue database
+    Inqueue.remove({'_id':req.params.id})
+      .exec(function(err, articles) {
+          if (err) {
+              return res.send(400, {
+                  message: getErrorMessage(err)
+              });
+          } else {
+              res.send('object successfully deleted');
+          }
+      });
+    // Remove job from dictionary
+    delete jobs[req.params.id]
 }
 
 // TODO - function to get all scheduled notifications - get request
 export const getScheduledNotifications = (req, res, next) => {
-
+  if (req.query.limit === undefined) { // if the optional query cparameter 'limit' is not given
+      Inqueue.find().sort('-notify_time')
+      .lean().exec( (err, notifications) => {
+          if (err) {
+              console.error(err);
+              res.status(500).send("Failure to get notifications.");
+          }
+          else {
+              res.end(JSON.stringify(notifications));
+          }
+      });
+  }
+  else {
+      Inqueue.find().sort('-notify_time')
+      .limit(parseInt(req.query.limit))
+      .lean().exec( (err, notifications) => {
+          if (err) {
+              console.error(err);
+              res.status(500).send("Failure to get notifications.");
+          }
+          else {
+              res.end(JSON.stringify(notifications));
+          }
+      });
+  }
 }
 
 // TODO - function to get a scheduled notification by _id
 export const getScheduledNotificationsById = (req, res, next) => {
-
+  Inqueue.findOne({'_id':req.params.id})
+  .exec(function(err, articles) {
+      if (err) {
+          return res.send(400, {
+              message: getErrorMessage(err)
+          });
+      } else {
+          res.jsonp(articles._id); // WHAT IS THIS?
+      }
+  });
 }
 
 // TODO - function to update a scheduled notification before its sent
 export const updateScheduledNotification = (req, res, next) => {
-
+  Inqueue.update({'_id':req.params.id},{$set: req.body})
+    .exec(function(err, articles) {
+        if (err) {
+            return res.send(400, {
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.send('update by id successful');
+        }
+      });
 }
 
 
@@ -55,7 +147,7 @@ export const notifySubscribers = (req, res, next) => {
 
     note.save(); // saving notification to db
 
-    Subscribe.find( (err, subscribers) => {
+      Subscribe.find( (err, subscribers) => {
         console.log(subscribers) // debugging statement
 
         for (var i = 0; i < subscribers.length; i++) { // iterating through all notifications in db
