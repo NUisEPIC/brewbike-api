@@ -106,7 +106,7 @@ export const getScheduledNotifications = (req, res, next) => {
 }
 
 // TODO - function to get a scheduled notification by _id
-export const getScheduledNotificationsById = (req, res, next) => {
+export const getScheduledNotificationById = (req, res, next) => {
   Inqueue.findOne({'_id':req.params.id})
   .exec(function(err, articles) {
       if (err) {
